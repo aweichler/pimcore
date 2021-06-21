@@ -15,6 +15,7 @@
 
 namespace Pimcore\Google;
 
+use Google\Service\CustomSearchAPI;
 use Pimcore\Cache;
 use Pimcore\Google\Cse\Item;
 use Pimcore\Model;
@@ -55,7 +56,7 @@ class Cse implements PaginateListingInterface
         $query = $this->getQuery();
 
         if ($client) {
-            $search = new \Google_Service_Customsearch($client);
+            $search = new CustomSearchAPI($client);
 
             // determine language
             $language = \Pimcore::getContainer()->get('pimcore.locale')->findLocale();
@@ -138,9 +139,9 @@ class Cse implements PaginateListingInterface
     public $query = '';
 
     /**
-     * @var array
+     * @var CustomSearchAPI\Search
      */
-    public $raw = [];
+    public $raw;
 
     /**
      * @var array
@@ -158,9 +159,9 @@ class Cse implements PaginateListingInterface
     }
 
     /**
-     * @param \Google_Service_Customsearch_Search $googleResponse
+     * @param CustomSearchAPI\Search $googleResponse
      */
-    public function readGoogleResponse(\Google_Service_Customsearch_Search $googleResponse)
+    public function readGoogleResponse(CustomSearchAPI\Search $googleResponse)
     {
         $items = [];
 
@@ -250,7 +251,7 @@ class Cse implements PaginateListingInterface
     }
 
     /**
-     * @param array $raw
+     * @param CustomSearchAPI\Search $raw
      *
      * @return $this
      */
@@ -262,7 +263,7 @@ class Cse implements PaginateListingInterface
     }
 
     /**
-     * @return array
+     * @return CustomSearchAPI\Search
      */
     public function getRaw()
     {
